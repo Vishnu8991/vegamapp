@@ -19,57 +19,76 @@ class BuildTableWidget extends StatelessWidget {
   final String? onTap; // On tap funtion of each row
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: const Color(0xffffffff),
-        borderRadius: BorderRadius.circular(7.0),
-        border: Border.all(width: 1.0, color: AppColors.dividerColor),
-      ),
-      child: SingleChildScrollView(
-        padding: EdgeInsets.all(size.width * 0.05 > 20 ? 20 : size.width * 0.05),
-        scrollDirection: Axis.horizontal,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-                //headers
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: List.generate(
-                    headers.length,
-                    (index) => getCell(title: headers[index], isTitle: true, context: context, orderNo: '0', index: 0),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                Container(height: 1, width: 800, color: AppColors.dividerColor),
-                const SizedBox(height: 20),
-              ] +
-              //body
-              List.generate(
+    return 
+    
+    Column(
+      children: List.generate(
                 cells.length,
-                (index) => Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: List.generate(
-                        cells[index]['list'].length,
-                        (index2) => getCell(
-                            orderNo: cells[index]['list'][0],
-                            title: cells[index]['list'][index2],
-                            onTap: urls != null && cells[index]['list'][index2] == 'Download' ? urls![index] : onTap,
-                            context: context,
-                            id: id != null ? id![index] : null,
-                            index: index),
+                (index) => 
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          child: Container(
+            // width: double.infinity,
+            // decoration: BoxDecoration(
+            //   color: const Color(0xffffffff),
+            //   borderRadius: BorderRadius.circular(7.0),
+            //   border: Border.all(width: 1.0, 
+            //   color: AppColors.dividerColor
+            //   ),
+            // ),
+            decoration: BoxDecoration(
+                          color: const Color(0xffffffff),
+                          borderRadius: BorderRadius.circular(size.width * .025 > 20 ? 20 : size.width * 0.025),
+                          border: Border.all(width: 1.0, color: AppColors.kPrimaryColor),
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Color(0x0a000000),
+                              offset: Offset(0, 10),
+                              blurRadius: 40,
+                            ),
+                          ],
+                        ),
+            child: SingleChildScrollView(
+              padding: EdgeInsets.all(size.width * 0.05 > 20 ? 20 : size.width * 0.05),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                      //headers
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: List.generate(
+                          headers.length,
+                          (index) => getCell(title: headers[index], isTitle: true, context: context, orderNo: '0', index: 0),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      // Container(height: 1, width: 800, color: AppColors.dividerColor),
+                      // const SizedBox(height: 20),
+                    
+                    //body
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: List.generate(
+                          cells[index]['list'].length,
+                          (index2) => getCell(
+                              orderNo: cells[index]['list'][0],
+                              title: cells[index]['list'][index2],
+                              onTap: urls != null && cells[index]['list'][index2] == 'Download' ? urls![index] : onTap,
+                              context: context,
+                              id: id != null ? id![index] : null,
+                              index: index),
+                        ),
                       ),
                     ),
-                    if (index < cells.length - 1) const SizedBox(height: 20),
-                    if (index < cells.length - 1) Container(height: 1, width: 800, color: AppColors.dividerColor),
-                    if (index < cells.length - 1) const SizedBox(height: 20),
-                  ],
-                ),
+                    if (index < cells.length - 1) const SizedBox(height: 20),],
               ),
+            ),
+          ),
         ),
-      ),
+    
+    )
     );
   }
 

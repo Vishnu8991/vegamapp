@@ -10,6 +10,7 @@ import 'package:m2/services/search_services.dart';
 import 'package:m2/services/state_management/cart/cart_data.dart';
 import 'package:m2/services/state_management/token/token.dart';
 import 'package:m2/utilities/utilities.dart';
+import 'package:m2/utilities/widgets/products/cart_price_update.dart';
 import 'package:m2/utilities/widgets/widgets.dart';
 import 'package:m2/views/auth/auth.dart';
 import 'package:m2/views/cart_views/cart_addresss_view.dart';
@@ -29,7 +30,7 @@ class _CartViewState extends State<CartView> {
   ScrollController scrollController = ScrollController();
 
   // Package imported
-  final deboucer = Debouncer(milliseconds: 500);
+  final deboucer = Debouncer(milliseconds: 100);
 
   late CartData cartData;
   late AuthToken token;
@@ -438,12 +439,20 @@ class _CartViewState extends State<CartView> {
                       const SizedBox(height: 15),
                       Text(item['product']['name'], style: AppStyles.getMediumTextStyle(fontSize: 15, color: AppColors.fontColor)),
                       const SizedBox(height: 10),
-                      BuildPriceWithOffer(
+                      // BuildPriceWithOffer(
+                      //   price: f.format(item['product']['special_price'] ?? item['product']['price_range']['minimum_price']['regular_price']['value']),
+                      //   originalPrice: item['product']['price_range']['maximum_price']['regular_price']['value'].toString(),
+                      //   offer: item['product']['price_range']['maximum_price']['discount']['percent_off'] * 1.0,
+                      //   priceSize: 17,
+                      //   currency: item['product']['price_range']['minimum_price']['regular_price']['currency'],
+                      // ),
+                      CartPriceUpdate(
                         price: f.format(item['product']['special_price'] ?? item['product']['price_range']['minimum_price']['regular_price']['value']),
                         originalPrice: item['product']['price_range']['maximum_price']['regular_price']['value'].toString(),
                         offer: item['product']['price_range']['maximum_price']['discount']['percent_off'] * 1.0,
                         priceSize: 17,
                         currency: item['product']['price_range']['minimum_price']['regular_price']['currency'],
+                        item: item,
                       ),
                       const SizedBox(height: 10),
                       getItemNoChanger(size: size, item: item, cartData: cartData, refetch: refetch),
@@ -546,26 +555,110 @@ class _CartViewState extends State<CartView> {
     MainAxisAlignment? mainAxisAlignment,
     double? height,
   }) {
-    return Row(
+    return 
+    // Row(
+    //   mainAxisAlignment: mainAxisAlignment ?? MainAxisAlignment.center,
+    //   children: [
+    //     Container(
+    //       decoration: BoxDecoration(
+    //         border: Border.all(width: 1, color: AppColors.evenFadedText),
+    //       ),
+    //       // padding: const EdgeInsets.symmetric(vertical: 10),
+    //       alignment: Alignment.center,
+    //       width: size.width * 0.1,
+    //       height: height ?? 50,
+    //       child: Text(item['quantity'].toString().padLeft(2, '0'), style: AppStyles.getRegularTextStyle(fontSize: 18, color: AppColors.fadedText)),
+    //     ),
+    //     Container(
+    //       decoration: BoxDecoration(
+    //         border: Border.all(width: 1, color: AppColors.evenFadedText),
+    //       ),
+    //       alignment: Alignment.center,
+    //       width: size.width * 0.1,
+    //       height: height ?? 50,
+    //       child: FittedBox(
+    //         child: Mutation(
+    //             options: MutationOptions(
+    //               document: gql(CartApis.updateCart),
+    //               onCompleted: (data) async {
+    //                 //print(data);
+    //                 // await cartData.getCartData(context, token);
+    //                 refetch!();
+    //                 setState(() {});
+    //               },
+    //               onError: (error) {
+    //                 print(error);
+    //                 showSnackBar(context: context, message: error!.graphqlErrors[0].message, backgroundColor: Colors.red);
+    //               },
+    //             ),
+    //             builder: (runMutation, result) {
+    //               return Column(
+    //                 children: [
+    //                   InkWell(
+    //                     onTap: () {
+    //                       // cartList[index].noOfItems++;
+
+    //                       print(item['quantity']);
+    //                       item['quantity']++;
+    //                       deboucer.run(() {
+    //                         print(item['quantity']);
+    //                         runMutation({
+    //                           "input": {
+    //                             "cart_id": cartData.cartId,
+    //                             "cart_items": [
+    //                               {"cart_item_id": item['id'], "quantity": item['quantity']}
+    //                             ]
+    //                           }
+    //                         });
+    //                       });
+    //                       setState(() {});
+    //                     },
+    //                     child:
+    //                         SizedBox(width: size.width * 0.1, height: height != null ? height * 0.5 : 24, child: Icon(Icons.expand_less, size: height != null ? height * 0.5 : 24)),
+    //                   ),
+    //                   InkWell(
+    //                     onTap: () {
+    //                       // if (cartList[index].noOfItems != 0) cartList[index].noOfItems--;
+    //                       // if (cartList[index].noOfItems == 0) cartList.removeAt(index);
+    //                       if (item['quantity'] > 1) {
+    //                         setState(() => item['quantity']--);
+
+    //                         deboucer.run(() {
+    //                           print(item['quantity']);
+    //                           runMutation({
+    //                             "input": {
+    //                               "cart_id": cartData.cartId,
+    //                               "cart_items": [
+    //                                 {"cart_item_id": item['id'], "quantity": item['quantity']}
+    //                               ]
+    //                             }
+    //                           });
+    //                         });
+    //                       }
+    //                       setState(() {});
+    //                     },
+    //                     child:
+    //                         SizedBox(height: height != null ? height * 0.5 : 24, width: size.width * 0.1, child: Icon(Icons.expand_more, size: height != null ? height * 0.5 : 24)),
+    //                   )
+    //                 ],
+    //               );
+    //             }),
+    //       ),
+    //     ),
+    //   ],
+    // );
+    Row(
       mainAxisAlignment: mainAxisAlignment ?? MainAxisAlignment.center,
       children: [
         Container(
           decoration: BoxDecoration(
+            // color: AppColors.faded,
             border: Border.all(width: 1, color: AppColors.evenFadedText),
-          ),
-          // padding: const EdgeInsets.symmetric(vertical: 10),
-          alignment: Alignment.center,
-          width: size.width * 0.1,
-          height: height ?? 50,
-          child: Text(item['quantity'].toString().padLeft(2, '0'), style: AppStyles.getRegularTextStyle(fontSize: 18, color: AppColors.fadedText)),
-        ),
-        Container(
-          decoration: BoxDecoration(
-            border: Border.all(width: 1, color: AppColors.evenFadedText),
+            borderRadius: BorderRadius.circular(8)
           ),
           alignment: Alignment.center,
-          width: size.width * 0.1,
-          height: height ?? 50,
+          width: size.width * 0.3,
+          height: height ?? 38,
           child: FittedBox(
             child: Mutation(
                 options: MutationOptions(
@@ -582,30 +675,9 @@ class _CartViewState extends State<CartView> {
                   },
                 ),
                 builder: (runMutation, result) {
-                  return Column(
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      InkWell(
-                        onTap: () {
-                          // cartList[index].noOfItems++;
-
-                          print(item['quantity']);
-                          item['quantity']++;
-                          deboucer.run(() {
-                            print(item['quantity']);
-                            runMutation({
-                              "input": {
-                                "cart_id": cartData.cartId,
-                                "cart_items": [
-                                  {"cart_item_id": item['id'], "quantity": item['quantity']}
-                                ]
-                              }
-                            });
-                          });
-                          setState(() {});
-                        },
-                        child:
-                            SizedBox(width: size.width * 0.1, height: height != null ? height * 0.5 : 24, child: Icon(Icons.expand_less, size: height != null ? height * 0.5 : 24)),
-                      ),
                       InkWell(
                         onTap: () {
                           // if (cartList[index].noOfItems != 0) cartList[index].noOfItems--;
@@ -628,7 +700,40 @@ class _CartViewState extends State<CartView> {
                           setState(() {});
                         },
                         child:
-                            SizedBox(height: height != null ? height * 0.5 : 24, width: size.width * 0.1, child: Icon(Icons.expand_more, size: height != null ? height * 0.5 : 24)),
+                            SizedBox(width: size.width * 0.1, height: height != null ? height * 0.5 : 24, child: Icon(Icons.remove, size: height != null ? height * 0.5 : 24)),
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          // border: Border.all(width: 1, color: AppColors.evenFadedText),
+                        ),
+                        // padding: const EdgeInsets.symmetric(vertical: 10),
+                        alignment: Alignment.center,
+                        width: size.width * 0.2,
+                        height: height ?? 60,
+                        child: Text(item['quantity'].toString().padLeft(2, '0'), style: AppStyles.getRegularTextStyle(fontSize: 18,)),
+                      ),
+                      InkWell(
+                        onTap: () {
+                           // cartList[index].noOfItems++;
+
+                          print(item['quantity']);
+                          item['quantity']++;
+                          deboucer.run(() {
+                            print(item['quantity']);
+                            runMutation({
+                              "input": {
+                                "cart_id": cartData.cartId,
+                                "cart_items": [
+                                  {"cart_item_id": item['id'], "quantity": item['quantity']}
+                                ]
+                              }
+                            });
+                          });
+                          setState(() {});
+                         
+                        },
+                        child:
+                            SizedBox(height: height != null ? height * 0.5 : 24, width: size.width * 0.1, child: Icon(Icons.add, size: height != null ? height * 0.5 : 24)),
                       )
                     ],
                   );

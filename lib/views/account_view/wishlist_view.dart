@@ -202,14 +202,16 @@ class _WishlistViewState extends State<WishlistView> {
                     child: BuildErrorWidget(onRefresh: refetch),
                   );
                 }
-                return ListView.separated(
+                return 
+
+                GridView.builder(
                   shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: result.data!['wishlist']['items'].length,
-                  separatorBuilder: (context, index) => Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 5),
-                    child: Divider(thickness: 1, color: AppColors.dividerColor),
-                  ),
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount:  result.data!['wishlist']['items'].length,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    mainAxisExtent: 300,
+                    mainAxisSpacing: 10,crossAxisSpacing: 10,
+                    crossAxisCount: 2), 
                   itemBuilder: (context, index) => BuildWishlistItem(
                     wishlistId: authToken.user.wishlists![0].id!,
                     data: result.data!['wishlist']['items'][index],
@@ -217,6 +219,21 @@ class _WishlistViewState extends State<WishlistView> {
                     authToken: authToken,
                   ),
                 );
+                // ListView.separated(
+                //   shrinkWrap: true,
+                //   physics: const NeverScrollableScrollPhysics(),
+                //   itemCount: result.data!['wishlist']['items'].length,
+                //   separatorBuilder: (context, index) => Padding(
+                //     padding: const EdgeInsets.symmetric(vertical: 5),
+                //     child: Divider(thickness: 1, color: AppColors.dividerColor),
+                //   ),
+                //   itemBuilder: (context, index) => BuildWishlistItem(
+                //     wishlistId: authToken.user.wishlists![0].id!,
+                //     data: result.data!['wishlist']['items'][index],
+                //     refetch: refetch,
+                //     authToken: authToken,
+                //   ),
+                // );
               },
             )
           ],
@@ -249,224 +266,501 @@ class _BuildWishlistItemState extends State<BuildWishlistItem> {
       // log(jsonEncode(widget.data));
       //   context.push('/product/${widget.data['product']['url_key']}');
       // },
-      child: Row(
-        children: [
-          Expanded(
-            flex: 30,
-            child: Container(
-              constraints: const BoxConstraints(minHeight: 200, minWidth: 100),
-              decoration: BoxDecoration(
-                // color: Colors.amber,
-                border: Border.all(width: 1, color: AppColors.buttonColor),
-                borderRadius: BorderRadius.circular(10),
-                image: DecorationImage(
-                  image: CachedNetworkImageProvider(widget.data['product']['image']['url']),
-                  fit: BoxFit.contain,
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(width: 15),
-          Expanded(
-            flex: 60,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    Expanded(child: Text(widget.data['product']['name'], style: AppStyles.getMediumTextStyle(fontSize: 16))),
-                    const SizedBox(width: 5),
-                    Mutation(
-                        options: MutationOptions(
-                          document: gql(ProductApi.removeProductsFromWishlist),
-                          onCompleted: (result) {
-                            //print(result);
-                            // //print('complete ${result!['addProductsToCart']['cart']['total_quantity']}');
-                            if (result != null) {
-                              try {
-                                showSnackBar(context: context, message: result['removeProductsFromWishlist']['user_errors'][0]['message'], backgroundColor: Colors.red);
-                              } catch (e) {
-                                showSnackBar(
-                                  context: context,
-                                  message: "Removed from shopping list",
-                                  backgroundColor: AppColors.snackbarSuccessBackgroundColor,
-                                );
-                              }
-                              widget.refetch!();
-                            }
-                          },
-                          onError: (result) {
-                            //print('error $result');
-                          },
-                        ),
-                        builder: (RunMutation runMutation, QueryResult? result) {
-                          return IconButton(
-                            onPressed: () {
-                              runMutation({
-                                'wishlistId': widget.authToken.user.wishlists![0].id,
-                                'wishlistItemsIds': [widget.data['id']]
-                              });
-                            },
-                            icon: const Icon(Icons.delete_outline, color: Colors.black),
-                          );
-                        }),
-                  ],
-                ),
-                if (widget.data['product']['configurable_options'] != null)
-                  Wrap(
-                    spacing: 10,
-                    runSpacing: 10,
-                    children: List.generate(
-                      widget.data['product']['configurable_options'].length,
-                      (index) {
-                        var data = widget.data['product']['configurable_options'][index];
-                        // if (widget.data['configurable_options'][index]['attribute_code'] == 'color') {
-                        //   return getColorVarient(widget.data['configurable_options'][index], index);
-                        // }
-                        // return getTextVarient(widget.data['configurable_options'][index], index);
-                        return ConstrainedBox(
-                          constraints: const BoxConstraints(maxWidth: 100),
-                          child: ButtonTheme(
-                            layoutBehavior: ButtonBarLayoutBehavior.constrained,
-                            alignedDropdown: true,
-                            height: 15,
-                            child: DropdownButtonFormField<String>(
-                              isExpanded: true,
-                              value: varientData[index],
-                              hint: Text(data['label']),
-                              onChanged: (value) {
-                                varientData[index] = value;
-                                setSku();
-                              },
-                              decoration: InputDecoration(
-                                contentPadding: EdgeInsets.zero,
-                                border: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: BorderSide(color: AppColors.buttonColor, width: 1)),
-                                enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: BorderSide(color: AppColors.buttonColor, width: 1)),
-                                focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: BorderSide(color: AppColors.buttonColor, width: 1)),
-                              ),
-                              items: List.generate(
-                                data['values'].length,
-                                (configIndex) => DropdownMenuItem(
-                                  value: data['values'][configIndex]['uid'],
-                                  child: Text(data['values'][configIndex]['label'], style: AppStyles.getRegularTextStyle(fontSize: 12)),
-                                ),
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
+      child: 
+      // Container(
+      //   decoration: BoxDecoration(
+      //   border: Border.all(width: 1, color: AppColors.buttonColor)),
+      //   child: Row(
+      //     children: [
+      //       Expanded(
+      //         flex: 30,
+      //         child: Container(
+      //           constraints: const BoxConstraints(minHeight: 200, minWidth: 100),
+      //           decoration: BoxDecoration(
+      //             // color: Colors.amber,
+      //             // border: Border.all(width: 1, color: AppColors.buttonColor),
+      //             borderRadius: BorderRadius.circular(10),
+      //             image: DecorationImage(
+      //               image: CachedNetworkImageProvider(widget.data['product']['image']['url']),
+      //               fit: BoxFit.contain,
+      //             ),
+      //           ),
+      //         ),
+      //       ),
+      //       const SizedBox(width: 15),
+      //       Expanded(
+      //         flex: 60,
+      //         child: Column(
+      //           crossAxisAlignment: CrossAxisAlignment.start,
+      //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //           children: [
+      //             Row(
+      //               children: [
+      //                 Expanded(child: Text(widget.data['product']['name'], style: AppStyles.getMediumTextStyle(fontSize: 16))),
+      //                 const SizedBox(width: 5),
+      //                 Mutation(
+      //                     options: MutationOptions(
+      //                       document: gql(ProductApi.removeProductsFromWishlist),
+      //                       onCompleted: (result) {
+      //                         //print(result);
+      //                         // //print('complete ${result!['addProductsToCart']['cart']['total_quantity']}');
+      //                         if (result != null) {
+      //                           try {
+      //                             showSnackBar(context: context, message: result['removeProductsFromWishlist']['user_errors'][0]['message'], backgroundColor: Colors.red);
+      //                           } catch (e) {
+      //                             showSnackBar(
+      //                               context: context,
+      //                               message: "Removed from shopping list",
+      //                               backgroundColor: AppColors.snackbarSuccessBackgroundColor,
+      //                             );
+      //                           }
+      //                           widget.refetch!();
+      //                         }
+      //                       },
+      //                       onError: (result) {
+      //                         //print('error $result');
+      //                       },
+      //                     ),
+      //                     builder: (RunMutation runMutation, QueryResult? result) {
+      //                       return IconButton(
+      //                         onPressed: () {
+      //                           runMutation({
+      //                             'wishlistId': widget.authToken.user.wishlists![0].id,
+      //                             'wishlistItemsIds': [widget.data['id']]
+      //                           });
+      //                         },
+      //                         icon: const Icon(Icons.delete_outline, color: Colors.black),
+      //                       );
+      //                     }),
+      //               ],
+      //             ),
+      //             if (widget.data['product']['configurable_options'] != null)
+      //               Wrap(
+      //                 spacing: 10,
+      //                 runSpacing: 10,
+      //                 children: List.generate(
+      //                   widget.data['product']['configurable_options'].length,
+      //                   (index) {
+      //                     var data = widget.data['product']['configurable_options'][index];
+      //                     // if (widget.data['configurable_options'][index]['attribute_code'] == 'color') {
+      //                     //   return getColorVarient(widget.data['configurable_options'][index], index);
+      //                     // }
+      //                     // return getTextVarient(widget.data['configurable_options'][index], index);
+      //                     return ConstrainedBox(
+      //                       constraints: const BoxConstraints(maxWidth: 100),
+      //                       child: ButtonTheme(
+      //                         layoutBehavior: ButtonBarLayoutBehavior.constrained,
+      //                         alignedDropdown: true,
+      //                         height: 15,
+      //                         child: DropdownButtonFormField<String>(
+      //                           isExpanded: true,
+      //                           value: varientData[index],
+      //                           hint: Text(data['label']),
+      //                           onChanged: (value) {
+      //                             varientData[index] = value;
+      //                             setSku();
+      //                           },
+      //                           decoration: InputDecoration(
+      //                             contentPadding: EdgeInsets.zero,
+      //                             border: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: BorderSide(color: AppColors.buttonColor, width: 1)),
+      //                             enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: BorderSide(color: AppColors.buttonColor, width: 1)),
+      //                             focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: BorderSide(color: AppColors.buttonColor, width: 1)),
+      //                           ),
+      //                           items: List.generate(
+      //                             data['values'].length,
+      //                             (configIndex) => DropdownMenuItem(
+      //                               value: data['values'][configIndex]['uid'],
+      //                               child: Text(data['values'][configIndex]['label'], style: AppStyles.getRegularTextStyle(fontSize: 12)),
+      //                             ),
+      //                           ),
+      //                         ),
+      //                       ),
+      //                     );
+      //                   },
+      //                 ),
+      //               ),
+      //             Row(
+      //               children: [
+      //                 Expanded(
+      //                   child: RichText(
+      //                     text: TextSpan(
+      //                       children: [
+      //                         if (widget.data['product']['special_price'] != null)
+      //                           TextSpan(
+      //                             text: '$currency ${widget.data['product']['special_price'].toStringAsFixed(2)}\n',
+      //                             style: AppStyles.getMediumTextStyle(fontSize: 16, color: Colors.black),
+      //                             children: [
+      //                               TextSpan(
+      //                                 text: '$currency ${widget.data['product']['price_range']['minimum_price']['regular_price']['value'].toStringAsFixed(2)}',
+      //                                 style: AppStyles.getRegularTextStyle(fontSize: 12, color: Colors.black).copyWith(decoration: TextDecoration.lineThrough),
+      //                               ),
+      //                               TextSpan(
+      //                                 text: ' ${widget.data['product']['price_range']['maximum_price']['discount']['percent_off']}% off',
+      //                                 style: AppStyles.getRegularTextStyle(fontSize: 12, color: Colors.black),
+      //                               ),
+      //                             ],
+      //                           )
+      //                         else
+      //                           TextSpan(
+      //                             text: '$currency ${widget.data['product']['price_range']['minimum_price']['regular_price']['value'].toStringAsFixed(2)}',
+      //                             style: AppStyles.getMediumTextStyle(fontSize: 16, color: Colors.black),
+      //                           ),
+      //                       ],
+      //                     ),
+      //                   ),
+      //                 ),
+      //                 const SizedBox(width: 5),
+      //                 Center(
+      //                   child: Mutation(
+      //                       options: MutationOptions(
+      //                         document: gql(widget.data['product']['__typename'] == 'SimpleProduct' ? ProductApi.addWishlistItemstoCart : ProductApi.addProductToCart),
+      //                         onCompleted: (result) {
+      //                           //print(result);
+      //                           try {
+      //                             if (result!['addWishlistItemsToCart']['status']) {
+      //                               showSnackBar(context: context, message: "Added to cart", backgroundColor: AppColors.snackbarSuccessBackgroundColor);
+      //                             } else {
+      //                               showSnackBar(
+      //                                   context: context,
+      //                                   message: result['addWishlistItemsToCart']['add_wishlist_items_to_cart_user_errors'][0]['message'],
+      //                                   backgroundColor: AppColors.snackbarSuccessBackgroundColor);
+      //                             }
+      //                           } catch (e) {
+      //                             try {
+      //                               showSnackBar(
+      //                                 context: context,
+      //                                 message: result!['addProductsToCart']['user_errors'][0]['message'],
+      //                                 backgroundColor: AppColors.primaryColor,
+      //                               );
+      //                             } catch (e) {
+      //                               cartData.putCartCount(result!['addProductsToCart']['cart']['total_quantity']);
+      //                               cartData.putCartPrice(result['addProductsToCart']['cart']['prices']['grand_total']['value'].toDouble());
+      //                               showSnackBar(context: context, message: "Added to cart", backgroundColor: AppColors.snackbarSuccessBackgroundColor);
+      //                               // await Future.delayed(const Duration(milliseconds: 300), () async {
+      //                               //   await cartData.getCartData(context, authToken);
+      //                               // });
+      //                               setState(() {});
+        
+      //                               //print(e);
+      //                             }
+      //                           }
+      //                           widget.refetch!();
+      //                           cartData.getCartData(context, Provider.of<AuthToken>(context, listen: false));
+      //                           //print('complete ${result!['addProductsToCart']['cart']['total_quantity']}');
+      //                         },
+      //                         onError: (result) {
+      //                           //print('error $result');
+      //                         },
+      //                       ),
+      //                       builder: (RunMutation runMutation, QueryResult? result) {
+      //                         return TextButton(
+      //                           style: AppStyles.filledButtonStyle,
+      //                           onPressed: () {
+      //                             String sku;
+      //                             if (widget.data['product']['__typename'] == 'SimpleProduct') {
+      //                               sku = widget.data['product']['sku'];
+      //                               runMutation({
+      //                                 'wishlistId': widget.wishlistId,
+      //                                 'wishlistItemsIds': [widget.data['id']]
+      //                               });
+      //                             } else {
+      //                               if (varientData.contains(null)) {
+      //                                 showSnackBar(context: context, message: "Select a varient", backgroundColor: Colors.red);
+      //                                 return;
+      //                               }
+      //                               sku = selectedSku;
+      //                               runMutation({
+      //                                 'cartIdString': cartData.cartId,
+      //                                 'cartItemsMap': [
+      //                                   {'quantity': 1, 'sku': sku}
+      //                                 ]
+      //                               });
+      //                             }
+      //                           },
+      //                           child: result!.isLoading ? const BuildLoadingWidget() : Text("Add to Cart", style: AppStyles.getRegularTextStyle(fontSize: 14)),
+      //                         );
+      //                       }),
+      //                 )
+      //               ],
+      //             ),
+      //           ],
+      //         ),
+      //       )
+      //     ],
+      //   ),
+      // ),
+
+
+
+      Container(
+        padding: EdgeInsets.all(4.0),
+        decoration: BoxDecoration(
+        border: Border.all(width: 1, color: AppColors.buttonColor),
+        borderRadius: BorderRadius.circular(10)),
+        child: Column(
+          children: [
+            Expanded(
+              flex: 60,
+              child: Container(
+                alignment: Alignment.topLeft,
+                constraints: const BoxConstraints(minHeight: 200, minWidth: 100),
+                decoration: BoxDecoration(
+                  // color: Colors.amber,
+                  // border: Border.all(width: 1, color: AppColors.buttonColor),
+                  borderRadius: BorderRadius.circular(10),
+                  image: DecorationImage(
+                    image: CachedNetworkImageProvider(widget.data['product']['image']['url']),
+                    fit: BoxFit.contain,
                   ),
-                Row(
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(
-                      child: RichText(
-                        text: TextSpan(
-                          children: [
-                            if (widget.data['product']['special_price'] != null)
-                              TextSpan(
-                                text: '$currency ${widget.data['product']['special_price'].toStringAsFixed(2)}\n',
-                                style: AppStyles.getMediumTextStyle(fontSize: 16, color: Colors.black),
-                                children: [
-                                  TextSpan(
-                                    text: '$currency ${widget.data['product']['price_range']['minimum_price']['regular_price']['value'].toStringAsFixed(2)}',
-                                    style: AppStyles.getRegularTextStyle(fontSize: 12, color: Colors.black).copyWith(decoration: TextDecoration.lineThrough),
-                                  ),
-                                  TextSpan(
-                                    text: ' ${widget.data['product']['price_range']['maximum_price']['discount']['percent_off']}% off',
-                                    style: AppStyles.getRegularTextStyle(fontSize: 12, color: Colors.black),
-                                  ),
-                                ],
-                              )
-                            else
-                              TextSpan(
-                                text: '$currency ${widget.data['product']['price_range']['minimum_price']['regular_price']['value'].toStringAsFixed(2)}',
-                                style: AppStyles.getMediumTextStyle(fontSize: 16, color: Colors.black),
-                              ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 5),
-                    Center(
-                      child: Mutation(
+                    if (widget.data['product']['special_price'] != null)
+                LayoutBuilder(
+                  builder: (context,constraints) {
+                    return Container(
+                      
+                                  // constraints: BoxConstraints(
+                                  //   maxHeight: size.width * 0.1 > 100 ? 100 : size.width * 0.1,
+                                  //   maxWidth: size.width * 0.1 > 100 ? 100 : size.width * 0.1,
+                                  // ),
+                                                  decoration: BoxDecoration(
+                                                  color: AppColors.kPrimaryColor,
+                                                    borderRadius: BorderRadius.only(topLeft: Radius.circular(5), bottomRight: Radius.circular(5))
+                                                  ),
+                                                  padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                                                  alignment: Alignment.center,
+                                                  height:constraints.maxHeight*0.30,
+                                                  child: Text.rich(
+                                                    TextSpan(
+                                                      children: [
+                                                          TextSpan(
+                                                      text: '${widget.data['product']['price_range']['maximum_price']['discount']['percent_off']}%\n off',
+                                                      style: AppStyles.getRegularTextStyle(fontSize: 12, color: Colors.white),
+                                                    ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                );
+                  }
+                ),
+                            Spacer(),
+                    Mutation(
                           options: MutationOptions(
-                            document: gql(widget.data['product']['__typename'] == 'SimpleProduct' ? ProductApi.addWishlistItemstoCart : ProductApi.addProductToCart),
+                            document: gql(ProductApi.removeProductsFromWishlist),
                             onCompleted: (result) {
                               //print(result);
-                              try {
-                                if (result!['addWishlistItemsToCart']['status']) {
-                                  showSnackBar(context: context, message: "Added to cart", backgroundColor: AppColors.snackbarSuccessBackgroundColor);
-                                } else {
-                                  showSnackBar(
-                                      context: context,
-                                      message: result['addWishlistItemsToCart']['add_wishlist_items_to_cart_user_errors'][0]['message'],
-                                      backgroundColor: AppColors.snackbarSuccessBackgroundColor);
-                                }
-                              } catch (e) {
+                              // //print('complete ${result!['addProductsToCart']['cart']['total_quantity']}');
+                              if (result != null) {
                                 try {
+                                  showSnackBar(context: context, message: result['removeProductsFromWishlist']['user_errors'][0]['message'], backgroundColor: Colors.red);
+                                } catch (e) {
                                   showSnackBar(
                                     context: context,
-                                    message: result!['addProductsToCart']['user_errors'][0]['message'],
-                                    backgroundColor: AppColors.primaryColor,
+                                    message: "Removed from shopping list",
+                                    backgroundColor: AppColors.snackbarSuccessBackgroundColor,
                                   );
-                                } catch (e) {
-                                  cartData.putCartCount(result!['addProductsToCart']['cart']['total_quantity']);
-                                  cartData.putCartPrice(result['addProductsToCart']['cart']['prices']['grand_total']['value'].toDouble());
-                                  showSnackBar(context: context, message: "Added to cart", backgroundColor: AppColors.snackbarSuccessBackgroundColor);
-                                  // await Future.delayed(const Duration(milliseconds: 300), () async {
-                                  //   await cartData.getCartData(context, authToken);
-                                  // });
-                                  setState(() {});
-
-                                  //print(e);
                                 }
+                                widget.refetch!();
                               }
-                              widget.refetch!();
-                              cartData.getCartData(context, Provider.of<AuthToken>(context, listen: false));
-                              //print('complete ${result!['addProductsToCart']['cart']['total_quantity']}');
                             },
                             onError: (result) {
                               //print('error $result');
                             },
                           ),
                           builder: (RunMutation runMutation, QueryResult? result) {
-                            return TextButton(
-                              style: AppStyles.filledButtonStyle,
+                            return IconButton(
                               onPressed: () {
-                                String sku;
-                                if (widget.data['product']['__typename'] == 'SimpleProduct') {
-                                  sku = widget.data['product']['sku'];
-                                  runMutation({
-                                    'wishlistId': widget.wishlistId,
-                                    'wishlistItemsIds': [widget.data['id']]
-                                  });
-                                } else {
-                                  if (varientData.contains(null)) {
-                                    showSnackBar(context: context, message: "Select a varient", backgroundColor: Colors.red);
-                                    return;
-                                  }
-                                  sku = selectedSku;
-                                  runMutation({
-                                    'cartIdString': cartData.cartId,
-                                    'cartItemsMap': [
-                                      {'quantity': 1, 'sku': sku}
-                                    ]
-                                  });
-                                }
+                                runMutation({
+                                  'wishlistId': widget.authToken.user.wishlists![0].id,
+                                  'wishlistItemsIds': [widget.data['id']]
+                                });
                               },
-                              child: result!.isLoading ? const BuildLoadingWidget() : Text("Add to Cart", style: AppStyles.getRegularTextStyle(fontSize: 14)),
+                              icon: const Icon(Icons.delete_outline, color: Colors.black),
                             );
                           }),
-                    )
                   ],
                 ),
-              ],
+              ),
             ),
-          )
-        ],
+            // const SizedBox(width: 15),
+            Expanded(
+              flex: 60,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Text(
+                      widget.data['product']['name'],textAlign: TextAlign.center,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                       style: AppStyles.getMediumTextStyle(fontSize: 16))),
+                  const SizedBox(width: 5),
+      
+                Expanded(
+                    child: RichText(
+                      text: TextSpan(
+                        children: [
+                          if (widget.data['product']['special_price'] != null)
+                            TextSpan(
+                              text: '$currency ${widget.data['product']['special_price'].toStringAsFixed(2)}  ',
+                              style: AppStyles.getMediumTextStyle(fontSize: 16, color: Colors.black),
+                              children: [
+                                TextSpan(
+                                  text: '$currency ${widget.data['product']['price_range']['minimum_price']['regular_price']['value'].toStringAsFixed(2)}',
+                                  style: AppStyles.getRegularTextStyle(fontSize: 12, color: Colors.black).copyWith(decoration: TextDecoration.lineThrough),
+                                ),
+                                // TextSpan(
+                                //   text: '${widget.data['product']['price_range']['maximum_price']['discount']['percent_off']}% off',
+                                //   style: AppStyles.getRegularTextStyle(fontSize: 12, color: Colors.orange),
+                                // ),
+                              ],
+                            )
+                          else
+                            TextSpan(
+                              text: '$currency ${widget.data['product']['price_range']['minimum_price']['regular_price']['value'].toStringAsFixed(2)}',
+                              style: AppStyles.getMediumTextStyle(fontSize: 16, color: Colors.black),
+                            ),
+                        ],
+                      ),
+                    ),
+                  ),
+      
+                  
+                  if (widget.data['product']['configurable_options'] != null)
+                    Expanded(
+                      child: Row(
+                        children: List.generate(
+                          widget.data['product']['configurable_options'].length,
+                          (index) {
+                            var data = widget.data['product']['configurable_options'][index];
+                            return Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 3),
+                                child: ConstrainedBox(
+                                  constraints: const BoxConstraints(maxWidth: 100),
+                                  child: ButtonTheme(
+                                    layoutBehavior: ButtonBarLayoutBehavior.constrained,
+                                    alignedDropdown: true,
+                                    height: 15,
+                                    child: DropdownButtonFormField<String>(
+                                      isExpanded: true,
+                                      value: varientData[index],
+                                      hint: Text(data['label'], style: TextStyle(fontSize: 11),),
+                                      onChanged: (value) {
+                                        varientData[index] = value;
+                                        setSku();
+                                      },
+                                      decoration: InputDecoration(
+                                        contentPadding: EdgeInsets.zero,
+                                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: BorderSide(color: AppColors.buttonColor, width: 1)),
+                                        enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: BorderSide(color: AppColors.buttonColor, width: 1)),
+                                        focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: BorderSide(color: AppColors.buttonColor, width: 1)),
+                                      ),
+                                      items: List.generate(
+                                        data['values'].length,
+                                        (configIndex) => DropdownMenuItem(
+                                          value: data['values'][configIndex]['uid'],
+                                          child: Text(data['values'][configIndex]['label'], style: AppStyles.getRegularTextStyle(fontSize: 12)),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    )
+      ,
+                  
+                  const SizedBox(width: 5),
+                  Center(
+                    child: Mutation(
+                        options: MutationOptions(
+                          document: gql(widget.data['product']['__typename'] == 'SimpleProduct' ? ProductApi.addWishlistItemstoCart : ProductApi.addProductToCart),
+                          onCompleted: (result) {
+                            //print(result);
+                            try {
+                              if (result!['addWishlistItemsToCart']['status']) {
+                                showSnackBar(context: context, message: "Added to cart", backgroundColor: AppColors.snackbarSuccessBackgroundColor);
+                              } else {
+                                showSnackBar(
+                                    context: context,
+                                    message: result['addWishlistItemsToCart']['add_wishlist_items_to_cart_user_errors'][0]['message'],
+                                    backgroundColor: AppColors.snackbarSuccessBackgroundColor);
+                              }
+                            } catch (e) {
+                              try {
+                                showSnackBar(
+                                  context: context,
+                                  message: result!['addProductsToCart']['user_errors'][0]['message'],
+                                  backgroundColor: AppColors.primaryColor,
+                                );
+                              } catch (e) {
+                                cartData.putCartCount(result!['addProductsToCart']['cart']['total_quantity']);
+                                cartData.putCartPrice(result['addProductsToCart']['cart']['prices']['grand_total']['value'].toDouble());
+                                showSnackBar(context: context, message: "Added to cart", backgroundColor: AppColors.snackbarSuccessBackgroundColor);
+                                // await Future.delayed(const Duration(milliseconds: 300), () async {
+                                //   await cartData.getCartData(context, authToken);
+                                // });
+                                setState(() {});
+                            
+                                //print(e);
+                              }
+                            }
+                            widget.refetch!();
+                            cartData.getCartData(context, Provider.of<AuthToken>(context, listen: false));
+                            //print('complete ${result!['addProductsToCart']['cart']['total_quantity']}');
+                          },
+                          onError: (result) {
+                            //print('error $result');
+                          },
+                        ),
+                        builder: (RunMutation runMutation, QueryResult? result) {
+                          return TextButton(
+                            style: AppStyles.filledButtonStyle,
+                            onPressed: () {
+                              String sku;
+                              if (widget.data['product']['__typename'] == 'SimpleProduct') {
+                                sku = widget.data['product']['sku'];
+                                runMutation({
+                                  'wishlistId': widget.wishlistId,
+                                  'wishlistItemsIds': [widget.data['id']]
+                                });
+                              } else {
+                                if (varientData.contains(null)) {
+                                  showSnackBar(context: context, message: "Select a varient", backgroundColor: Colors.red);
+                                  return;
+                                }
+                                sku = selectedSku;
+                                runMutation({
+                                  'cartIdString': cartData.cartId,
+                                  'cartItemsMap': [
+                                    {'quantity': 1, 'sku': sku}
+                                  ]
+                                });
+                              }
+                            },
+                            child: result!.isLoading ? const BuildLoadingWidget() : Text("Add to Cart", style: AppStyles.getRegularTextStyle(fontSize: 14)),
+                          );
+                        }),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
       ),
+
+      
+
+
+      
+
     );
   }
 

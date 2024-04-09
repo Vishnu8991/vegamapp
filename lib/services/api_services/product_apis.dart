@@ -70,6 +70,17 @@ class ProductApi {
           }
         }
       }
+      price_tiers {
+        discount {
+          amount_off
+          percent_off
+        }
+        final_price {
+          value
+          currency
+        }
+        quantity
+      }
       categories {
         uid
         name
@@ -185,6 +196,17 @@ class ProductApi {
             }
           }
         }
+        price_tiers {
+        discount {
+          amount_off
+          percent_off
+        }
+        final_price {
+          value
+          currency
+        }
+        quantity
+      }
         ... on ConfigurableProduct {
           configurable_options {
             id
@@ -441,4 +463,5 @@ mutation addWishlistItemsToCart($wishlistId: ID!,$wishlistItemsIds: [ID!]!){
     }
   }
   }''';
+
 }

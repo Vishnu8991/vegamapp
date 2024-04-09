@@ -199,7 +199,7 @@ class _AccountSideBarState extends State<AccountSideBar> {
                       BuilProfileButtons(
                         title: 'My Orders',
                         svgUrl: 'orders',
-                        url: "/account/${OrdersView.route}",
+                        url: "/account/${OrdersView.route}",  
                         isBold: widget.currentPage == OrdersView.route && !AppResponsive.isMobile(context),
                       ),
                       BuilProfileButtons(

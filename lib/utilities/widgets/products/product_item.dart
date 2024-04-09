@@ -9,6 +9,7 @@ import 'package:m2/services/state_management/cart/cart_data.dart';
 import 'package:m2/services/state_management/token/token.dart';
 import 'package:m2/services/state_management/user/user_data.dart';
 import 'package:m2/utilities/utilities.dart';
+import 'package:m2/utilities/widgets/products/price_without_offer.dart';
 import 'package:m2/utilities/widgets/widgets.dart';
 import 'package:m2/views/product_views/product_view.dart';
 import 'package:provider/provider.dart';
@@ -55,6 +56,12 @@ class _ProductItemState extends State<ProductItem> {
 
   @override
   Widget build(BuildContext context) {
+
+    final size = MediaQuery.of(context).size;
+    // bool hasOffer = widget.offer != null && widget.offer! > 0;
+
+    final roundedOffer = widget.offer != null ? widget.offer!.round() : null;
+
     return InkWell(
       hoverColor: Colors.transparent,
       onTap: () => context.push('/${ProductView.route}/${widget.productModel.urlKey}.${widget.productModel.urlSuffix}'),
@@ -65,7 +72,7 @@ class _ProductItemState extends State<ProductItem> {
         constraints: const BoxConstraints(maxHeight: 400),
         decoration: BoxDecoration(
           color: AppColors.scaffoldColor,
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.zero,
           boxShadow: AppResponsive.isMobile(context)
               ? [BoxShadow(color: AppColors.evenFadedText, blurRadius: 5)]
               : !_isHovered
@@ -74,7 +81,6 @@ class _ProductItemState extends State<ProductItem> {
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
           mainAxisSize: MainAxisSize.min,
           children: [
             Expanded(
@@ -141,41 +147,96 @@ class _ProductItemState extends State<ProductItem> {
                       },
                     ),
                     builder: (RunMutation runMutation, QueryResult? mResult) {
-                      return InkWell(
-                        onTap: () {
-                          if (userData.data.wishlists?[0].id != null) {
-                            Map<String, dynamic> variables = {};
-
-                            if (widget.productModel.wishlistItem != null) {
-                              variables = {
-                                'wishlistId': userData.data.wishlists?[0].id,
-                                'wishlistItemsIds': [widget.productModel.wishlistItem]
-                              };
-                              // runMutation(variables);
-                            } else {
-                              variables = {
-                                'id': userData.data.wishlists?[0].id,
-                                'wishlistItems': [
-                                  {'sku': widget.sku, 'quantity': 1}
-                                ]
-                              };
-                            }
-
-                            runMutation(variables);
-                          } else {
-                            showSnackBar(
-                              context: context,
-                              message: "You must login to add items to wishlist",
-                              backgroundColor: Colors.red,
-                            );
-                          }
-                        },
-                        child: mResult!.isLoading
-                            ? BuildLoadingWidget(color: AppColors.primaryColor)
-                            : Icon(
-                                widget.productModel.wishlistItem != null ? Icons.favorite : Icons.favorite_outline,
-                                color: widget.productModel.wishlistItem != null ? Colors.red : AppColors.fadedText,
+                      return Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          if (widget.originalPrice != null && widget.offer != 0)
+                          LayoutBuilder(
+                            builder: (context, constraints) {
+                              return   Container(
+                              // constraints: BoxConstraints(
+                              //   maxHeight: size.width * 0.1 > 100 ? 100 : size.width * 0.1,
+                              //   maxWidth: size.width * 0.1 > 100 ? 100 : size.width * 0.1,
+                              // ),
+                                              decoration: BoxDecoration(
+                                              color: AppColors.kPrimaryColor,
+                                                borderRadius: BorderRadius.only(topLeft: Radius.circular(5), bottomRight: Radius.circular(5))
+                                              ),
+                                              padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                                              alignment: Alignment.center,
+                                              height:constraints.maxHeight*0.25,
+                                              child: Column(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text.rich(
+                                TextSpan(
+                                  children: [
+                                      TextSpan(
+                                        text: '$roundedOffer%',
+                                        // text: '   ${widget.offer}%',
+                                        style: AppStyles.getBoldTextStyle(fontSize: widget.offerSize ?? 12, color: AppColors.textFieldColor),
+                                      ),
+                                  ],
+                                ),
                               ),
+                              Text.rich(
+                                TextSpan(
+                                  children: [
+                                    if (widget.originalPrice != null && widget.offer != 0)
+                                      TextSpan(
+                                              text: 'Off',
+                                              style: AppStyles.getBoldTextStyle(fontSize: widget.offerSize ?? 12, color: AppColors.textFieldColor),
+                                      ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                              ),
+                            );
+                            },
+                            
+                          ),
+                
+                Spacer(),
+                
+                          InkWell(
+                            onTap: () {
+                              if (userData.data.wishlists?[0].id != null) {
+                                Map<String, dynamic> variables = {};
+                                              
+                                if (widget.productModel.wishlistItem != null) {
+                                  variables = {
+                                    'wishlistId': userData.data.wishlists?[0].id,
+                                    'wishlistItemsIds': [widget.productModel.wishlistItem]
+                                  };
+                                  // runMutation(variables);
+                                } else {
+                                  variables = {
+                                    'id': userData.data.wishlists?[0].id,
+                                    'wishlistItems': [
+                                      {'sku': widget.sku, 'quantity': 1}
+                                    ]
+                                  };
+                                }
+                                              
+                                runMutation(variables);
+                              } else {
+                                showSnackBar(
+                                  context: context,
+                                  message: "You must login to add items to wishlist",
+                                  backgroundColor: Colors.red,
+                                );
+                              }
+                            },
+                            child: mResult!.isLoading
+                                ? BuildLoadingWidget(color: AppColors.primaryColor)
+                                : Icon(
+                                    widget.productModel.wishlistItem != null ? Icons.favorite : Icons.favorite_outline,
+                                    color: widget.productModel.wishlistItem != null ? Colors.red : AppColors.fadedText,
+                                  ),
+                          ),
+                        ],
                       );
                     }),
               ),
@@ -188,7 +249,16 @@ class _ProductItemState extends State<ProductItem> {
             ),
             const SizedBox(height: 5),
             FittedBox(
-              child: BuildPriceWithOffer(
+              // child: BuildPriceWithOffer(
+              //   price: widget.price,
+              //   currency: currency,
+              //   priceSize: widget.priceSize ?? 16,
+              //   originalPrice: widget.originalPrice,
+              //   originalPriceSize: widget.originalPriceSize ?? 14,
+              //   offer: widget.offer,
+              //   offerSize: widget.offerSize ?? 12,
+              // ),
+              child: BuildPriceWithOutOffer(
                 price: widget.price,
                 currency: currency,
                 priceSize: widget.priceSize ?? 16,

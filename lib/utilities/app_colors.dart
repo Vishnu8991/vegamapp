@@ -1,15 +1,22 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  static Color kPrimaryColor = const Color(0xff0E887C); //Primary color of the app
+  // static Color kPrimaryColor = const Color(0xff0E887C); //Primary color of the app
+  static Color kPrimaryColor = const Color(0xfff68121); //Primary color of the app
 
   static LinearGradient gradient = const LinearGradient(
-      colors: [Color(0xff31ACA0), Color(0xff187B71)],
+      colors: [
+        Colors.white,
+        Color.fromARGB(255, 190, 222, 218),
+        Color.fromARGB(255, 159, 235, 228),
+        Color.fromARGB(255, 82, 162, 154)],
       begin: Alignment.topCenter,
       end: Alignment.bottomCenter); // A common gradient throughout the app
 
   static Color fadedText = const Color(0xff707070); // Faded text color
+  static Color searchButton = const Color(0xfff68121); // search button color
   static Color evenFadedText = const Color(0xffc5c5c5); // Even faded text color.
+  static Color faded = Colors.grey.shade100; // Even faded text color.
   static Color lessFadedText = const Color(0xff4A4A4A);
   static Color fontColor = Colors.black; // Font color (usually black)
 
@@ -21,9 +28,13 @@ class AppColors {
 
   static Color appBarColor = Colors.white;
 
+
   static Color scaffoldColor = Colors.white; // Main background color
 
-  static Color buttonColor = const Color(0xff31aca0); // Color of buttons throughout the app
+  // static Color buttonColor = const Color(0xff31aca0); // Color of buttons throughout the app
+  static Color discountColor = Color.fromARGB(255, 241, 111, 4); 
+  
+  static Color buttonColor = const Color(0xfff68121); // Color of buttons throughout the app
   static Color buttonTextColor = Colors.white;
 
   static Color facebookBlue = const Color(0xff4267B2);
@@ -32,8 +43,13 @@ class AppColors {
   static Color dividerColor = const Color(0xffEFEFEF);
 
   static Color textFieldColor = const Color(0xffE9F1F4);
+  
+  static Color reviewButtonColor = Color.fromARGB(255, 37, 49, 4);
 
-  static Color blogText = const Color(0xff103F50);
+  static Color ratingColor = Colors.blue.shade900;
+
+  // static Color blogText = const Color(0xff103F50);
+  static Color blogText = const Color(0xfff68121);
 
   static Color snackbarSuccessBackgroundColor = Colors.green;
   static Color snackbarSuccessTextColor = Colors.white;
@@ -52,5 +68,6 @@ class AppColors {
     800: Color.fromRGBO(14, 136, 124, 0.9),
     900: Color.fromRGBO(14, 136, 124, 1),
   };
-  static MaterialColor primaryColor = MaterialColor(0xff0E887C, color); // Material color version of primary color for integrating to flutter
+  // static MaterialColor primaryColor = MaterialColor(0xff0E887C, color); // Material color version of primary color for integrating to flutter
+  static MaterialColor primaryColor = MaterialColor(0xfff68121, color); // Material color version of primary color for integrating to flutter
 }

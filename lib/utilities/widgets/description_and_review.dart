@@ -138,16 +138,17 @@ class BuildDescriptionReviewState extends State<BuildDescriptionReview> {
                     constraints: const BoxConstraints(maxWidth: 400),
                     decoration: BoxDecoration(
                       // border: Border.all(color: AppColors.dividerColor),
-                      color: Colors.amber,
+                      // color: Colors.amber,
+                      color: AppColors.reviewButtonColor,
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(Icons.add_circle, size: 20),
+                        const Icon(Icons.add_circle, size: 20, color: Colors.white,),
                         const SizedBox(width: 10),
-                        Text("Add your review", style: AppStyles.getRegularTextStyle(fontSize: 14)),
+                        Text("Add your review", style: AppStyles.getRegularTextStyle(fontSize: 14,color: Colors.white),),
                       ],
                     ),
                   ),

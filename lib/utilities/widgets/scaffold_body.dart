@@ -4,6 +4,7 @@ import 'package:m2/services/state_management/cache_clear/cache_manager.dart';
 import 'package:m2/services/state_management/cart/cart_data.dart';
 import 'package:m2/services/state_management/categories/categories_data.dart';
 import 'package:m2/services/state_management/home/home_data.dart';
+import 'package:m2/services/state_management/most_viewed_products/most_viewed_products.dart';
 import 'package:m2/services/state_management/token/token.dart';
 import 'package:m2/services/state_management/user/user_data.dart';
 import 'package:m2/utilities/widgets/widgets.dart';
@@ -25,6 +26,7 @@ class _BuildScaffoldState extends State<BuildScaffold> {
     var token = Provider.of<AuthToken>(context, listen: false);
     var categories = Provider.of<CategoriesData>(context, listen: false);
     var homeData = Provider.of<HomeData>(context, listen: false);
+    var mostviewed = Provider.of<MostViewedData>(context, listen: false);
     var userData = Provider.of<UserData>(context, listen: false);
     var cacheManager = Provider.of<CacheManager>(context, listen: false);
     cacheManager.checkCache(context);
@@ -52,6 +54,9 @@ class _BuildScaffoldState extends State<BuildScaffold> {
     }
     if (homeData.data.isEmpty) {
       homeData.getHomeData(context);
+    }
+    if (mostviewed.data.isEmpty) {
+      mostviewed.fetchMostViewedData(context);
     }
   }
 

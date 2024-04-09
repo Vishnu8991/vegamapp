@@ -237,7 +237,8 @@ class CategoryBlock extends StatelessWidget {
                             // width: 200,
                             height: AppResponsive.isMobile(context) ? constraints.maxWidth * 0.19 : 188,
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
+                              gradient: AppColors.gradient,
+                              borderRadius: BorderRadius.circular(50),
                               image: DecorationImage(
                                 image: data['category_info'][index]['image'] == null
                                     ? const AssetImage('assets/images/categoryicon.png')
@@ -252,7 +253,7 @@ class CategoryBlock extends StatelessWidget {
                           const SizedBox(height: 10),
                           Text(
                             data['category_info'][index]['name'],
-                            style: AppStyles.getMediumTextStyle(fontSize: 14),
+                            style: AppStyles.getMediumTextStyle(fontSize: 14,),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                           )

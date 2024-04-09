@@ -107,156 +107,217 @@ class _AccountInformationViewState extends State<AccountInformationView> {
   Padding getBody(BuildContext context, Size size) {
     return Padding(
       padding: AppResponsive.isDesktop(context) ? const EdgeInsets.symmetric(horizontal: 60, vertical: 50) : EdgeInsets.symmetric(horizontal: size.width * 0.05),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20),
-            child: Text('Account Information', style: AppStyles.getMediumTextStyle(fontSize: 18, color: AppColors.primaryColor)),
-          ),
-          const SizedBox(height: 20),
-          TextFormField(
-            enabled: isEnabled,
-            controller: fName,
-            style: AppStyles.getLightTextStyle(fontSize: 17, color: AppColors.fadedText),
-            keyboardType: TextInputType.name,
-            textInputAction: TextInputAction.next,
-            decoration: InputDecoration(
-              disabledBorder: OutlineInputBorder(borderSide: BorderSide(color: AppColors.evenFadedText)),
-              border: OutlineInputBorder(borderSide: BorderSide(color: AppColors.evenFadedText)),
-              hintStyle: AppStyles.getLightTextStyle(fontSize: 17, color: AppColors.fadedText),
-              hintText: 'First name',
+      child: Container(
+      padding: AppResponsive.isDesktop(context) ? const EdgeInsets.symmetric(horizontal: 40, vertical: 40) : EdgeInsets.symmetric(horizontal: size.width * 0.03),
+        decoration: BoxDecoration(
+          border: Border.all(color: AppColors.kPrimaryColor),
+          borderRadius: BorderRadius.circular(5)
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20),
+              child: Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Account Information', style: AppStyles.getMediumTextStyle(fontSize: 18, color: AppColors.primaryColor)),
+                    Visibility(
+                      visible: isEnabled ? false : true,
+                      child: IconButton(
+                        onPressed:  () {
+                         
+                          setState(() => isEnabled = !isEnabled);
+                        }, icon: Icon(FontAwesomeIcons.penToSquare,),
+                      color:AppColors.kPrimaryColor ,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
-          ),
-          const SizedBox(height: 20),
-          TextFormField(
-            enabled: isEnabled,
-            controller: lName,
-            style: AppStyles.getLightTextStyle(fontSize: 17, color: AppColors.fadedText),
-            keyboardType: TextInputType.name,
-            textInputAction: TextInputAction.next,
-            decoration: InputDecoration(
-              disabledBorder: OutlineInputBorder(borderSide: BorderSide(color: AppColors.evenFadedText)),
-              border: OutlineInputBorder(borderSide: BorderSide(color: AppColors.evenFadedText)),
-              hintStyle: AppStyles.getLightTextStyle(fontSize: 17, color: AppColors.fadedText),
-              hintText: 'Last name',
+            // const SizedBox(height: 20),
+            TextFormField(
+              enabled: isEnabled,
+              controller: fName,
+              style: AppStyles.getLightTextStyle(fontSize: 17, color: AppColors.fadedText),
+              keyboardType: TextInputType.name,
+              textInputAction: TextInputAction.next,
+              decoration: InputDecoration(
+                labelText: isEnabled ? "First Name" : "",
+                labelStyle: TextStyle(color: AppColors.kPrimaryColor),
+                isDense: true,
+                disabledBorder: OutlineInputBorder(borderSide: BorderSide(color: AppColors.containerColor)),
+                border: OutlineInputBorder(borderSide: BorderSide(color: AppColors.evenFadedText)),
+                hintStyle: AppStyles.getLightTextStyle(fontSize: 17, color: AppColors.fadedText),
+                hintText: 'First name',
+              ),
             ),
-          ),
-          const SizedBox(height: 20),
-          // Wrap(
-          //   children: [
-          //     SizedBox(
-          //       width: 150,
-          //       child: ListTile(
-          //         onTap: () => setState(() {
-          //           if (isEnabled) _gender = Gender.male;
-          //         }),
-          //         leading: Radio(
-          //           toggleable: isEnabled,
-          //           value: Gender.male,
-          //           groupValue: _gender,
-          //           onChanged: (value) => setState(() {
-          //             if (isEnabled) _gender = Gender.male;
-          //           }),
-          //         ),
-          //         title: Text('Male', style: AppStyles.getLightTextStyle(fontSize: 16, color: AppColors.fadedText)),
-          //       ),
-          //     ),
-          //     SizedBox(
-          //       width: 150,
-          //       child: ListTile(
-          //         onTap: () => setState(() {
-          //           if (isEnabled) _gender = Gender.female;
-          //         }),
-          //         leading: Radio(
-          //           toggleable: isEnabled,
-          //           value: Gender.female,
-          //           groupValue: _gender,
-          //           onChanged: (value) => setState(() {
-          //             if (isEnabled) _gender = Gender.female;
-          //           }),
-          //         ),
-          //         title: Text('Female', style: AppStyles.getLightTextStyle(fontSize: 16, color: AppColors.fadedText)),
-          //       ),
-          //     ),
-          //   ],
-          // ),
-          // const SizedBox(height: 20),
-          TextFormField(
-            enabled: false,
-            controller: email,
-            style: AppStyles.getLightTextStyle(fontSize: 17, color: AppColors.fadedText),
-            keyboardType: TextInputType.name,
-            textInputAction: TextInputAction.next,
-            decoration: InputDecoration(
-              disabledBorder: OutlineInputBorder(borderSide: BorderSide(color: AppColors.evenFadedText)),
-              border: OutlineInputBorder(borderSide: BorderSide(color: AppColors.evenFadedText)),
-              hintStyle: AppStyles.getLightTextStyle(fontSize: 17, color: AppColors.fadedText),
-              hintText: 'Email',
+            Visibility(
+              visible: !isEnabled,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 5),
+                child: Container(
+                  width: double.infinity,
+                  height: 2,
+                  color: AppColors.kPrimaryColor,
+                ),
+              ),
             ),
-          ),
-          const SizedBox(height: 20),
-          // TextFormField(
-          //   enabled: false,
-          //   controller: phoneNo,
-          //   style: AppStyles.getLightTextStyle(fontSize: 17, color: AppColors.fadedText),
-          //   keyboardType: TextInputType.name,
-          //   textInputAction: TextInputAction.next,
-          //   decoration: InputDecoration(
-          //     disabledBorder: OutlineInputBorder(borderSide: BorderSide(color: AppColors.evenFadedText)),
-          //     border: OutlineInputBorder(borderSide: BorderSide(color: AppColors.evenFadedText)),
-          //     hintStyle: AppStyles.getLightTextStyle(fontSize: 17, color: AppColors.fadedText),
-          //     hintText: 'Phone number',
-          //   ),
-          // ),
-          // const SizedBox(height: 20),
-          // Edit details and upload to database
-          Mutation(
-              options: MutationOptions(
-                  document: gql(CustomerApis.updateCustomer),
-                  onCompleted: (data) {
-                    print(data);
-                    showSnackBar(context: context, message: "User updated successfully", backgroundColor: AppColors.snackbarSuccessBackgroundColor);
-                    userData.getUserData(context);
-                  },
-                  onError: (error) {
-                    print(error);
-                  }),
-              builder: (RunMutation runMutation, QueryResult? result) {
-                return TextButton(
-                  style: TextButton.styleFrom(
-                    fixedSize: const Size(100, 50),
-                    shape: const StadiumBorder(),
-                  ),
-                  onPressed: () {
-                    if (isEnabled) {
-                      runMutation({
-                        'input': {
-                          'firstname': fName.text,
-                          'lastname': lName.text,
-                          // 'gender': _gender == Gender.male ? 1 : 2,
-                        }
-                      });
-                    }
-                    setState(() => isEnabled = !isEnabled);
-                  },
-                  child: result!.isLoading
-                      ? BuildLoadingWidget(color: AppColors.buttonColor)
-                      : Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: isEnabled
-                              ? [
-                                  Icon(FontAwesomeIcons.floppyDisk, color: AppColors.primaryColor),
-                                  Text('Save', style: AppStyles.getRegularTextStyle(fontSize: 20, color: AppColors.primaryColor))
-                                ]
-                              : [
-                                  Icon(FontAwesomeIcons.penToSquare, color: AppColors.primaryColor),
-                                  Text('Edit', style: AppStyles.getRegularTextStyle(fontSize: 20, color: AppColors.primaryColor))
-                                ],
-                        ),
-                );
-              })
-        ],
+            SizedBox(height:isEnabled ? 20 : 5),
+            TextFormField(
+              enabled: isEnabled,
+              controller: lName,
+              style: AppStyles.getLightTextStyle(fontSize: 17, color: AppColors.fadedText),
+              keyboardType: TextInputType.name,
+              textInputAction: TextInputAction.next,
+              decoration: InputDecoration(
+                labelText: isEnabled ? "Last Name" : "",
+                labelStyle: TextStyle(color: AppColors.kPrimaryColor),
+                isDense: true,
+                disabledBorder: OutlineInputBorder(borderSide: BorderSide(color: AppColors.containerColor)),
+                border: OutlineInputBorder(borderSide: BorderSide(color: AppColors.evenFadedText)),
+                hintStyle: AppStyles.getLightTextStyle(fontSize: 17, color: AppColors.fadedText),
+                hintText: 'Last name',
+              ),
+            ),
+            Visibility(
+              visible: !isEnabled,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 5),
+                child: Container(
+                  width: double.infinity,
+                  height: 2,
+                  color: AppColors.kPrimaryColor,
+                ),
+              ),
+            ),
+            SizedBox(height:isEnabled ? 20 : 5),
+            // SizedBox(height: 20),
+            // Wrap(
+            //   children: [
+            //     SizedBox(
+            //       width: 150,
+            //       child: ListTile(
+            //         onTap: () => setState(() {
+            //           if (isEnabled) _gender = Gender.male;
+            //         }),
+            //         leading: Radio(
+            //           toggleable: isEnabled,
+            //           value: Gender.male,
+            //           groupValue: _gender,
+            //           onChanged: (value) => setState(() {
+            //             if (isEnabled) _gender = Gender.male;
+            //           }),
+            //         ),
+            //         title: Text('Male', style: AppStyles.getLightTextStyle(fontSize: 16, color: AppColors.fadedText)),
+            //       ),
+            //     ),
+            //     SizedBox(
+            //       width: 150,
+            //       child: ListTile(
+            //         onTap: () => setState(() {
+            //           if (isEnabled) _gender = Gender.female;
+            //         }),
+            //         leading: Radio(
+            //           toggleable: isEnabled,
+            //           value: Gender.female,
+            //           groupValue: _gender,
+            //           onChanged: (value) => setState(() {
+            //             if (isEnabled) _gender = Gender.female;
+            //           }),
+            //         ),
+            //         title: Text('Female', style: AppStyles.getLightTextStyle(fontSize: 16, color: AppColors.fadedText)),
+            //       ),
+            //     ),
+            //   ],
+            // ),
+            // const SizedBox(height: 20),
+            Visibility(
+              visible: true,
+              child: TextFormField(
+                enabled: false,
+                controller: email,
+                style: AppStyles.getLightTextStyle(fontSize: 17, color: AppColors.fadedText),
+                keyboardType: TextInputType.name,
+                textInputAction: TextInputAction.next,
+                decoration: InputDecoration(
+                  labelText: isEnabled ? "Email" : "",
+                  labelStyle: TextStyle(color: AppColors.kPrimaryColor),
+                  isDense: true,
+                  disabledBorder: OutlineInputBorder(borderSide: BorderSide(color: isEnabled? AppColors.evenFadedText:AppColors.containerColor)),
+                  border: OutlineInputBorder(borderSide: BorderSide(color: AppColors.evenFadedText)),
+                  hintStyle: AppStyles.getLightTextStyle(fontSize: 17, color: AppColors.fadedText),
+                  hintText: 'Email',
+                  prefixIcon: Icon(Icons.email_outlined, color: AppColors.fadedText,)
+                ),
+              ),
+            ),
+            SizedBox(height:isEnabled ? 20 : 0),
+            
+            // TextFormField(
+            //   enabled: false,
+            //   controller: phoneNo,
+            //   style: AppStyles.getLightTextStyle(fontSize: 17, color: AppColors.fadedText),
+            //   keyboardType: TextInputType.name,
+            //   textInputAction: TextInputAction.next,
+            //   decoration: InputDecoration(
+            //     disabledBorder: OutlineInputBorder(borderSide: BorderSide(color: AppColors.evenFadedText)),
+            //     border: OutlineInputBorder(borderSide: BorderSide(color: AppColors.evenFadedText)),
+            //     hintStyle: AppStyles.getLightTextStyle(fontSize: 17, color: AppColors.fadedText),
+            //     hintText: 'Phone number',
+            //   ),
+            // ),
+            // const SizedBox(height: 20),
+            // Edit details and upload to database
+            Mutation(
+                options: MutationOptions(
+                    document: gql(CustomerApis.updateCustomer),
+                    onCompleted: (data) {
+                      print(data);
+                      showSnackBar(context: context, message: "User updated successfully", backgroundColor: AppColors.snackbarSuccessBackgroundColor);
+                      userData.getUserData(context);
+                    },
+                    onError: (error) {
+                      print(error);
+                    }),
+                builder: (RunMutation runMutation, QueryResult? result) {
+                  return TextButton(
+                    style: TextButton.styleFrom(
+                      fixedSize: const Size(120, 50),
+                      shape: const StadiumBorder(),
+                    ),
+                    onPressed: () {
+                      if (isEnabled) {
+                        runMutation({
+                          'input': {
+                            'firstname': fName.text,
+                            'lastname': lName.text,
+                            // 'gender': _gender == Gender.male ? 1 : 2,
+                          }
+                        });
+                      }
+                      setState(() => isEnabled = !isEnabled);
+                    },
+                    child: result!.isLoading
+                        ? BuildLoadingWidget(color: AppColors.buttonColor)
+                        : Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: isEnabled
+                                ? [
+                                    Icon(FontAwesomeIcons.floppyDisk, color: AppColors.primaryColor),
+                                    Text('Save', style: AppStyles.getRegularTextStyle(fontSize: 20, color: AppColors.primaryColor))
+                                  ]
+                                : [
+                                    // Icon(FontAwesomeIcons.penToSquare, color: AppColors.primaryColor),
+                                    // Text('Edit', style: AppStyles.getRegularTextStyle(fontSize: 20, color: AppColors.primaryColor))
+                                  ],
+                          ),
+                  );
+                })
+          ],
+        ),
       ),
     );
   }

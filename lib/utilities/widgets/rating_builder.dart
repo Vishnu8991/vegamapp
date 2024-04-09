@@ -31,7 +31,8 @@ class BuildRating extends StatelessWidget {
               const SizedBox(width: 20),
               Text(
                 '$noOfReviews Reviews',
-                style: AppStyles.getRegularTextStyle(fontSize: 10, color: AppColors.fadedText),
+                // style: AppStyles.getRegularTextStyle(fontSize: 12, color: AppColors.fadedText),
+                style: AppStyles.getRegularTextStyle(fontSize: 12, color: AppColors.buttonColor),
               ),
             ]
           : <Widget>[

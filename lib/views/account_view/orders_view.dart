@@ -81,9 +81,11 @@ class _OrdersViewState extends State<OrdersView> {
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 20),
-            child: Text('My Orders', style: AppStyles.getMediumTextStyle(fontSize: 18, color: AppColors.primaryColor)),
+            child: Text('My Orders', style: AppStyles.getMediumTextStyle(fontSize: 20, color: AppColors.primaryColor)),
           ),
-          const SizedBox(height: 30),
+          const SizedBox(height: 10),
+          Container(height: 1, width: 800, color: AppColors.dividerColor),
+          const SizedBox(height: 20),
           getTableQuery(size),
         ],
       ),

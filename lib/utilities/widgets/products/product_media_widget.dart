@@ -37,17 +37,25 @@ class ProductMediaContainerState extends State<ProductMediaContainer> {
         borderRadius: BorderRadius.circular(10),
         border: Border.all(color: AppColors.dividerColor),
       ),
-      child: Row(
+      child: Column(
         children: [
+          Expanded(
+            flex: 8,
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 200),
+              child: _currentDisplayWidget,
+            ),
+          ),
           Flexible(
             flex: 2,
             child: SizedBox(
-              width: 70,
+              height: 70,
               child: ListView.separated(
+                scrollDirection: Axis.horizontal,
                 addAutomaticKeepAlives: true,
                 // padding: EdgeInsets.symmetric(vertical: widget.width * 0.05 > 10 ? 10 : widget.width * 0.05),
                 itemCount: widget.data.length,
-                separatorBuilder: (context, index) => const SizedBox(height: 10),
+                separatorBuilder: (context, index) => const SizedBox(width: 10),
                 itemBuilder: (context, index) {
                   return InkWell(
                     onTap: () {
@@ -71,13 +79,6 @@ class ProductMediaContainerState extends State<ProductMediaContainer> {
               ),
             ),
           ),
-          Expanded(
-            flex: 8,
-            child: AnimatedSwitcher(
-              duration: const Duration(milliseconds: 200),
-              child: _currentDisplayWidget,
-            ),
-          )
         ],
       ),
     );

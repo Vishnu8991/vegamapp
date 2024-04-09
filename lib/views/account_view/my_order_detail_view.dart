@@ -82,6 +82,7 @@ class _MyOrderDetailViewState extends State<MyOrderDetailView> {
           ListView.separated(
             itemCount: data['customer']['orders']['items'][0]['items'].length,
             shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
             separatorBuilder: (ctx, index) => !AppResponsive.isDesktop(context)
                 ? const SizedBox(height: 40)
                 : Column(

@@ -695,3 +695,55 @@ class PageInfo {
     return data;
   }
 }
+
+
+class MostViewedProductsModel {
+  int? currentPage;
+  List<MostViewedProductItem>? items;
+  int? pageSize;
+  int? totalPages;
+  int? totalCount;
+
+  MostViewedProductsModel({this.currentPage, this.items, this.pageSize, this.totalPages, this.totalCount});
+
+  MostViewedProductsModel.fromJson(Map<String, dynamic> json) {
+    currentPage = json['currentPage'];
+    if (json['items'] != null) {
+      items = <MostViewedProductItem>[];
+      json['items'].forEach((v) {
+        items!.add(MostViewedProductItem.fromJson(v));
+      });
+    }
+    pageSize = json['pageSize'];
+    totalPages = json['totalPages'];
+    totalCount = json['totalCount'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['currentPage'] = currentPage;
+    if (items != null) {
+      data['items'] = items!.map((v) => v.toJson()).toList();
+    }
+    data['pageSize'] = pageSize;
+    data['totalPages'] = totalPages;
+    data['totalCount'] = totalCount;
+    return data;
+  }
+}
+
+class MostViewedProductItem {
+  String? sku;
+
+  MostViewedProductItem({this.sku});
+
+  MostViewedProductItem.fromJson(Map<String, dynamic> json) {
+    sku = json['sku'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['sku'] = sku;
+    return data;
+  }
+}

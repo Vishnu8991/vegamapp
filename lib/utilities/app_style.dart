@@ -57,18 +57,33 @@ class AppStyles {
     );
   }
 
+  // static ButtonStyle filledButtonStyle = ButtonStyle(
+  //   // fixedSize: Size(widget.width * 0.4, widget.width * 0.1),
+  //   maximumSize: MaterialStateProperty.all(const Size.fromHeight(40)),
+  //   shape: MaterialStateProperty.all(StadiumBorder(side: BorderSide(color: AppColors.buttonColor, width: 2))),
+  //   backgroundColor: MaterialStateProperty.resolveWith(getButtonColor),
+  //   foregroundColor: MaterialStateProperty.resolveWith(getTextColor),
+  //   padding: MaterialStateProperty.all(const EdgeInsets.all(10)),
+  // );
   static ButtonStyle filledButtonStyle = ButtonStyle(
-    // fixedSize: Size(widget.width * 0.4, widget.width * 0.1),
     maximumSize: MaterialStateProperty.all(const Size.fromHeight(40)),
-    shape: MaterialStateProperty.all(StadiumBorder(side: BorderSide(color: AppColors.buttonColor, width: 2))),
+    shape: MaterialStateProperty.all(RoundedRectangleBorder(
+        borderRadius: BorderRadius.zero, // You can adjust the borderRadius as needed
+        side: BorderSide(color: AppColors.buttonColor, width: 2),
+    )),
     backgroundColor: MaterialStateProperty.resolveWith(getButtonColor),
     foregroundColor: MaterialStateProperty.resolveWith(getTextColor),
     padding: MaterialStateProperty.all(const EdgeInsets.all(10)),
-  );
+);
+
   static ButtonStyle outlineButtonStyle = ButtonStyle(
     // fixedSize: Size(widget.width * 0.4, widget.width * 0.1),
     maximumSize: MaterialStateProperty.all(const Size.fromHeight(40)),
-    shape: MaterialStateProperty.all(StadiumBorder(side: BorderSide(color: AppColors.buttonColor, width: 2))),
+    // shape: MaterialStateProperty.all(StadiumBorder(side: BorderSide(color: AppColors.buttonColor, width: 2))),
+    shape: MaterialStateProperty.all(RoundedRectangleBorder(
+        borderRadius: BorderRadius.zero,// You can adjust the borderRadius as needed
+        side: BorderSide(color: AppColors.buttonColor, width: 2),
+    )),
     backgroundColor: const MaterialStatePropertyAll(Colors.transparent),
     foregroundColor: MaterialStatePropertyAll(AppColors.primaryColor),
     padding: MaterialStateProperty.all(const EdgeInsets.all(10)),

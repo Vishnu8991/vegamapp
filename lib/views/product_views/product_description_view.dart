@@ -68,7 +68,7 @@ class _ProductDescriptionState extends State<ProductDescription> {
         // Name
         Text(
           "${productModel.items?[0].name}",
-          style: AppStyles.getMediumTextStyle(fontSize: 22, color: AppColors.fontColor),
+          style: AppStyles.getMediumTextStyle(fontSize: 20, color: AppColors.fontColor),
         ),
         const SizedBox(height: 10),
         // show rating
@@ -77,16 +77,18 @@ class _ProductDescriptionState extends State<ProductDescription> {
           noOfReviews: productModel.items?[0].reviewCount,
         ),
         // Show price
+        const SizedBox(height: 10),
         BuildPriceWithOffer(
           price: price,
           currency: currency,
-          priceSize: 22,
+          // priceSize: 22,
+          priceSize: 18,
           originalPrice: originalPrice,
           originalPriceSize: 18,
           offer: offer,
           offerSize: 13,
         ),
-        const SizedBox(height: 30),
+        const SizedBox(height: 20),
         Divider(height: 1, color: AppColors.dividerColor),
         const SizedBox(height: 20),
         // Show varients if any

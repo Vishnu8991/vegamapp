@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_portal/flutter_portal.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:m2/services/state_management/most_viewed_products/most_viewed_products.dart';
 import 'package:m2/services/state_management/wishlist/wishlist_dart.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -36,6 +37,7 @@ void main() async {
       Provider<CartData>(create: (context) => CartData(cart)),
       Provider<CategoriesData>(create: (context) => CategoriesData()),
       Provider<HomeData>(create: (context) => HomeData()),
+      Provider<MostViewedData>(create: (context) => MostViewedData()),
       Provider<UserData>(create: (context) => UserData()),
       Provider<CacheManager>(create: (context) => CacheManager()),
       Provider<WishlistData>(create: (context) => WishlistData()),
@@ -64,6 +66,8 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) => getToken());
+
+    HomeData().getHomeData(context);
   }
 
   @override

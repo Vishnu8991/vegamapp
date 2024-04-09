@@ -255,53 +255,56 @@ class _ProductVarientWidgetState extends State<ProductVarientWidget> {
 
   Widget buildQuantityChanger() {
     return SizedBox(
-      height: 45,
+      height: 38,
       child: Row(
         children: [
           SizedBox(
             width: 105,
-            child: Text('Quantity', style: AppStyles.getRegularTextStyle(fontSize: 13, color: AppColors.fadedText)),
+            // child: Text('Quantity', style: AppStyles.getRegularTextStyle(fontSize: 13, color: AppColors.fadedText)),
+            child: Text('Quantity', style: AppStyles.getRegularTextStyle(fontSize: 13, color: AppColors.fadedText,)),
           ),
           Container(
             decoration: BoxDecoration(
+              // border: Border.all(color: AppColors.evenFadedText),
               border: Border.all(color: AppColors.evenFadedText),
-              borderRadius: BorderRadius.circular(2),
+              borderRadius: BorderRadius.circular(8),
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Container(
-                  width: 60,
+              
+                // VerticalDivider(color: AppColors.evenFadedText, width: 2),
+                Row(
+                  children: [
+                    InkWell(
+                      onTap: () => setState(() {
+                        if (quantity > 1) quantity--;
+                      }),
+                      child: SizedBox(
+                        width: 40,
+                        height: 38,
+                        // child: Center(child: Icon(Icons.expand_more, size: 17.5, color: AppColors.evenFadedText)),
+                        child: Center(child: Icon(Icons.remove, size: 17.5, color: AppColors.fontColor)),
+                      ),
+                    ),
+                    
+                      Container(
+                  width: 50,
                   padding: const EdgeInsets.symmetric(vertical: 7.5, horizontal: 10),
                   alignment: Alignment.center,
                   child: Text(
                     quantity.round().toString(),
-                    style: AppStyles.getRegularTextStyle(fontSize: 14, color: AppColors.evenFadedText),
+                    // style: AppStyles.getRegularTextStyle(fontSize: 14, color: AppColors.evenFadedText),
+                    style: AppStyles.getRegularTextStyle(fontSize: 14, color: AppColors.fontColor),
                   ),
                 ),
-                VerticalDivider(color: AppColors.evenFadedText, width: 2),
-                Column(
-                  children: [
-                    Expanded(
-                      child: InkWell(
-                        onTap: () => setState(() => quantity++),
-                        child: SizedBox(
-                          width: 50,
-                          height: 40,
-                          child: Center(child: Icon(Icons.expand_less, size: 17.5, color: AppColors.evenFadedText)),
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: InkWell(
-                        onTap: () => setState(() {
-                          if (quantity > 1) quantity--;
-                        }),
-                        child: SizedBox(
-                          width: 50,
-                          height: 40,
-                          child: Center(child: Icon(Icons.expand_more, size: 17.5, color: AppColors.evenFadedText)),
-                        ),
+                InkWell(
+                      onTap: () => setState(() => quantity++),
+                      child: SizedBox(
+                        width: 40,
+                        height: 38,
+                        // child: Center(child: Icon(Icons.expand_less, size: 17.5, color: AppColors.evenFadedText)),
+                        child: Center(child: Icon(Icons.add, size: 17.5, color: AppColors.fontColor)),
                       ),
                     ),
                   ],
